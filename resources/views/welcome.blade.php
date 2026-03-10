@@ -14,7 +14,7 @@
         <h2>di Rumah Sakit Hewan Pendidikan</h2>
         <h3>Universitas Airlangga</h3>
 
-        <a href="{{ route('rshp') }}" class="enter-btn">Masuk ke Halaman Utama</a>
+        <a href="{{ route('rshp') }}" class="enter-btn">Masuk ke Halaman Utamach</a>
     </div>
 </body>
 </html>
