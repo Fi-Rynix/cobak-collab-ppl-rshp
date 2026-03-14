@@ -47,7 +47,7 @@ class UserTest extends TestCase
 
     public function test_user_creation_and_role_assignment()
     {
-        $user = $this->createDummyUser(3); // Perawat
+        $user = $this->createDummyUser(4); 
 
         $this->assertDatabaseHas('user', [
             'email' => $user->email,
@@ -55,7 +55,7 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas('role_user', [
             'iduser' => $user->iduser,
-            'idrole' => 3
+            'idrole' => 4
         ]);
 
         $this->cleanupUser($user);

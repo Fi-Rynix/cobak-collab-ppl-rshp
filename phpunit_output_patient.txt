@@ -1,0 +1,101 @@
+PHPUnit 11.5.53 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.4.7
+Configuration: C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\phpunit.xml
+
+.[41;37mF[0m.....[41;37mF[0m..[41;37mF[0m....[41;37mF[0m[41;37mF[0m..                                               19 / 19 (100%)
+
+Time: 00:08.009, Memory: 46.00 MB
+
+There were 5 failures:
+
+1) Tests\Unit\PatientRegistrationTest::test_receptionist_register_patient_successful
+Failed asserting that a row in the table [user] matches the attributes {
+    "email": "TestEmail04@test.com"
+}.
+
+Found: [
+    {
+        "email": "aaaaasss@mail.com"
+    },
+    {
+        "email": "admin@mail.com"
+    },
+    {
+        "email": "dokteraralan@mail.com"
+    }
+] and 10 others.
+
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase.php:43
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\tests\Unit\PatientRegistrationTest.php:157
+
+2) Tests\Unit\PatientRegistrationTest::test_xss_attempt_owner_name
+Failed asserting that a row in the table [user] matches the attributes {
+    "email": "testemail14@test.com"
+}.
+
+Found: [
+    {
+        "email": "aaaaasss@mail.com"
+    },
+    {
+        "email": "admin@mail.com"
+    },
+    {
+        "email": "dokteraralan@mail.com"
+    }
+] and 10 others.
+
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase.php:43
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\tests\Unit\PatientRegistrationTest.php:319
+
+3) Tests\Unit\PatientRegistrationTest::test_admin_update_pemilik
+Failed asserting that a row in the table [user] matches the attributes {
+    "iduser": 831,
+    "nama": "Rup"
+}.
+
+Found similar results: [
+    {
+        "iduser": 831,
+        "nama": "Dummy Pemilik"
+    }
+].
+
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase.php:43
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\tests\Unit\PatientRegistrationTest.php:383
+
+4) Tests\Unit\PatientRegistrationTest::test_resepsionis_update_pemilik
+Failed asserting that a row in the table [user] matches the attributes {
+    "iduser": 840,
+    "nama": "Re1"
+}.
+
+Found similar results: [
+    {
+        "iduser": 840,
+        "nama": "Dummy Pemilik"
+    }
+].
+
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase.php:43
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\tests\Unit\PatientRegistrationTest.php:479
+
+5) Tests\Unit\PatientRegistrationTest::test_resepsionis_update_pet
+Failed asserting that a row in the table [pet] matches the attributes {
+    "idpet": 58,
+    "nama": "Re2"
+}.
+
+Found similar results: [
+    {
+        "idpet": 58,
+        "nama": "Dummy Pet"
+    }
+].
+
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase.php:43
+C:\my filess dudeee\Tugas Kuliah\Semester 4\PPL\cobak-collab-ppl-rshp\tests\Unit\PatientRegistrationTest.php:504
+
+[37;41mFAILURES![0m
+[37;41mTests: 19[0m[37;41m, Assertions: 32[0m[37;41m, Failures: 5[0m[37;41m.[0m
