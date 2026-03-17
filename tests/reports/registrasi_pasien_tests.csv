@@ -1,0 +1,5 @@
+testcase,test scenario,data test(negatif/positif),expected,actual
+TRP-01-01,Admin membuat pemilik valid,positif,Pemilik tersimpan dan redirect ke daftar pemilik,
+TRP-01-02,Admin membuat pemilik tanpa nama,negatif,Validation error pada nama,
+TRP-02-01,Resepsionis menambah pet valid,positif,Pet tersimpan terkait pemilik,
+TRP-02-02,Resepsionis menambah pet tanpa ras,negatif,Validation error pada ras,
