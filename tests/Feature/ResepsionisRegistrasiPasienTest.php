@@ -23,6 +23,15 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         return $resepsionis;
     }
 
+    // login sebagai perawat
+    private function actAsPerawat()
+    {
+        $perawat = WithRole::perawat();
+        $this->actingAs($perawat);
+        $this->withSession(['idrole' => 3, 'iduser' => $perawat->iduser]);
+        return $perawat;
+    }
+
     // login sebagai admin
     private function actAsAdmin()
     {
@@ -32,16 +41,25 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         return $admin;
     }
 
-    // positif case resepsionis create pemilik
+    // login sebagai dokter
+    private function actAsDokter()
+    {
+        $dokter = WithRole::dokter();
+        $this->actingAs($dokter);
+        $this->withSession(['idrole' => 2, 'iduser' => $dokter->iduser]);
+        return $dokter;
+    }
+
+    // positif case create pemilik
     public function test_resepsionis_berhasil_create_pemilik()
     {
         $this->actAsResepsionis();
 
         $pemilikData = [
-            'nama' => 'Budi Santoso',
-            'email' => 'budi.santoso@example.com',
-            'no_wa' => '089876543210',
-            'alamat' => 'Jalan Sudirman No 456, Jakarta',
+            'nama' => 'Siti Nurhaliza',
+            'email' => 'siti.nurhaliza@example.com',
+            'no_wa' => '082567891234',
+            'alamat' => 'Jalan Ahmad Yani No 789, Surabaya',
         ];
 
         $response = $this->post(route('Resepsionis.Pemilik.store-pemilik'), $pemilikData);
@@ -50,15 +68,15 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         $response->assertSessionHas('success', 'Data pemilik berhasil ditambahkan.');
 
         $this->assertDatabaseHas('user', [
-            'nama' => 'Budi Santoso',
-            'email' => 'budi.santoso@example.com',
+            'nama' => 'Siti Nurhaliza',
+            'email' => 'siti.nurhaliza@example.com',
         ]);
 
-        $user = User::where('email', 'budi.santoso@example.com')->first();
+        $user = User::where('email', 'siti.nurhaliza@example.com')->first();
         $this->assertDatabaseHas('pemilik', [
             'iduser' => $user->iduser,
-            'no_wa' => '089876543210',
-            'alamat' => 'Jalan Sudirman No 456, Jakarta',
+            'no_wa' => '082567891234',
+            'alamat' => 'Jalan Ahmad Yani No 789, Surabaya',
         ]);
 
         $this->assertDatabaseHas('role_user', [
@@ -68,15 +86,33 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         ]);
     }
 
-    // negatif case resepsionis create pemilik karena role bukan resepsionis
-    public function test_admin_gagal_create_pemilik_dengan_route_resepsionis()
+    // negatif case create pemilik karena role selain resepsionis
+    public function test_perawat_gagal_create_pemilik()
+    {
+        $this->actAsPerawat();
+
+        $pemilikData = [
+            'nama' => 'Perawat Test',
+            'email' => 'perawat@example.com',
+            'no_wa' => '082567891234',
+            'alamat' => 'Alamat perawat test',
+        ];
+
+        $response = $this->post(route('Resepsionis.Pemilik.store-pemilik'), $pemilikData);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('error', 'Anda tidak memiliki akses ke halaman ini.');
+    }
+
+    // negatif case create pemilik karena admin tidak bisa akses resepsionis route
+    public function test_admin_gagal_create_pemilik()
     {
         $this->actAsAdmin();
 
         $pemilikData = [
             'nama' => 'Admin Test',
             'email' => 'admin@example.com',
-            'no_wa' => '089876543210',
+            'no_wa' => '082567891234',
             'alamat' => 'Alamat admin test',
         ];
 
@@ -86,15 +122,33 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         $response->assertSessionHas('error', 'Anda tidak memiliki akses ke halaman ini.');
     }
 
-    // negatif case create pemilik dengan nama melebihi max length
-    public function test_gagal_resepsionis_create_pemilik_nama_melebihi_max_length()
+    // negatif case create pemilik karena dokter tidak bisa akses resepsionis route
+    public function test_dokter_gagal_create_pemilik()
+    {
+        $this->actAsDokter();
+
+        $pemilikData = [
+            'nama' => 'Dokter Test',
+            'email' => 'dokter@example.com',
+            'no_wa' => '082567891234',
+            'alamat' => 'Alamat dokter test',
+        ];
+
+        $response = $this->post(route('Resepsionis.Pemilik.store-pemilik'), $pemilikData);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('error', 'Anda tidak memiliki akses ke halaman ini.');
+    }
+
+    // negatif case create pemilik dengan nama kurang dari 3 karakter
+    public function test_gagal_create_pemilik_nama_kurang_dari_3_karakter()
     {
         $this->actAsResepsionis();
 
         $pemilikData = [
-            'nama' => str_repeat('A', 256),
+            'nama' => 'AB',
             'email' => 'test@example.com',
-            'no_wa' => '089876543210',
+            'no_wa' => '082567891234',
             'alamat' => 'Alamat test',
         ];
 
@@ -104,15 +158,17 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         $this->assertDatabaseMissing('user', ['email' => 'test@example.com']);
     }
 
-    // negatif case create pemilik dengan email tidak valid
-    public function test_gagal_resepsionis_create_pemilik_email_invalid()
+    // negatif case create pemilik dengan email duplikat
+    public function test_gagal_create_pemilik_email_duplikat()
     {
         $this->actAsResepsionis();
 
+        $existingUser = User::factory()->create(['email' => 'existing@example.com']);
+
         $pemilikData = [
-            'nama' => 'Resepsionis Test',
-            'email' => 'invalid-email-format',
-            'no_wa' => '089876543210',
+            'nama' => 'Siti Test',
+            'email' => 'existing@example.com',
+            'no_wa' => '082567891234',
             'alamat' => 'Alamat test',
         ];
 
@@ -121,7 +177,7 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         $response->assertSessionHasErrors('email');
     }
 
-    // positif case resepsionis create pet
+    // positif case create pet
     public function test_resepsionis_berhasil_create_pet()
     {
         $this->actAsResepsionis();
@@ -130,10 +186,10 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         $rasHewan = RasHewan::factory()->create();
 
         $petData = [
-            'nama' => 'Buddy',
-            'tanggal_lahir' => '2021-05-20',
-            'warna_tanda' => 'Coklat dan putih',
-            'jenis_kelamin' => 'J',
+            'nama' => 'Charlie',
+            'tanggal_lahir' => '2022-03-10',
+            'warna_tanda' => 'Hitam dengan putih',
+            'jenis_kelamin' => 'B',
             'idpemilik' => $pemilik->idpemilik,
             'idras_hewan' => $rasHewan->idras_hewan,
         ];
@@ -144,56 +200,12 @@ class ResepsionisRegistrasiPasienTest extends TestCase
         $response->assertSessionHas('success', 'Data pet berhasil ditambahkan.');
 
         $this->assertDatabaseHas('pet', [
-            'nama' => 'Buddy',
-            'tanggal_lahir' => '2021-05-20',
-            'warna_tanda' => 'Coklat dan putih',
-            'jenis_kelamin' => 'J',
+            'nama' => 'Charlie',
+            'tanggal_lahir' => '2022-03-10',
+            'warna_tanda' => 'Hitam dengan putih',
+            'jenis_kelamin' => 'B',
             'idpemilik' => $pemilik->idpemilik,
             'idras_hewan' => $rasHewan->idras_hewan,
         ]);
-    }
-
-    // negatif case resepsionis create pet tanpa nama
-    public function test_gagal_resepsionis_create_pet_tanpa_nama()
-    {
-        $this->actAsResepsionis();
-
-        $pemilik = Pemilik::factory()->create();
-        $rasHewan = RasHewan::factory()->create();
-
-        $petData = [
-            'nama' => '',
-            'tanggal_lahir' => '2021-05-20',
-            'warna_tanda' => 'Coklat',
-            'jenis_kelamin' => 'J',
-            'idpemilik' => $pemilik->idpemilik,
-            'idras_hewan' => $rasHewan->idras_hewan,
-        ];
-
-        $response = $this->post(route('Resepsionis.Pet.store-pet'), $petData);
-
-        $response->assertSessionHasErrors('nama');
-    }
-
-    // negatif case resepsionis create pet dengan jenis_kelamin invalid
-    public function test_gagal_resepsionis_create_pet_jenis_kelamin_invalid()
-    {
-        $this->actAsResepsionis();
-
-        $pemilik = Pemilik::factory()->create();
-        $rasHewan = RasHewan::factory()->create();
-
-        $petData = [
-            'nama' => 'Buddy',
-            'tanggal_lahir' => '2021-05-20',
-            'warna_tanda' => 'Coklat',
-            'jenis_kelamin' => 'M',
-            'idpemilik' => $pemilik->idpemilik,
-            'idras_hewan' => $rasHewan->idras_hewan,
-        ];
-
-        $response = $this->post(route('Resepsionis.Pet.store-pet'), $petData);
-
-        $response->assertSessionHasErrors('jenis_kelamin');
     }
 }

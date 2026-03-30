@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama', 255);
             $table->string('email', 255)->unique();
             $table->string('password', 255);
+            $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->bigInteger('deleted_by')->nullable();
         });
