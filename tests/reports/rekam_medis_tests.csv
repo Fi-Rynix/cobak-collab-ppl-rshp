@@ -1,0 +1,5 @@
+testcase,test scenario,data test(negatif/positif),expected,actual
+TRM-01-01,Admin membuat rekam_medis ketika temu_dokter.status='D',positif,Rekam medis tersimpan,
+TRM-01-02,Admin coba buat rekam_medis ketika temu_dokter.status='W',negatif,Gagal dan munculkan error/status not allowed,
+TRM-02-01,Dokter menambahkan detail yang valid,positif,Detail tersimpan terkait rekam_medis,
+TRM-02-02,Dokter menambahkan detail kosong,negatif,Validation error pada detail,
