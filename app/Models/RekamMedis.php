@@ -35,7 +35,7 @@ class RekamMedis extends Model
 
     public function detailRekamMedis()
     {
-        return $this->hasOne(DetailRekamMedis::class, 'idrekam_medis', 'idrekam_medis');
+        return $this->hasMany(DetailRekamMedis::class, 'idrekam_medis', 'idrekam_medis');
     }
 }
 

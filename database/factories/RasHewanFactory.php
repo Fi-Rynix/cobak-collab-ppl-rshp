@@ -23,6 +23,8 @@ class RasHewanFactory extends Factory
         return [
             'idjenis_hewan' => $jenisHewan->idjenis_hewan,
             'nama_ras' => fake()->word(),
+            'deleted_at' => null,
+            'deleted_by' => null,
         ];
     }
 

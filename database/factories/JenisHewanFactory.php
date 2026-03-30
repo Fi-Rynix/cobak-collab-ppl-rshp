@@ -20,6 +20,8 @@ class JenisHewanFactory extends Factory
 
         return [
             'nama_jenis_hewan' => fake()->randomElement($jenisHewan),
+            'deleted_at' => null,
+            'deleted_by' => null,
         ];
     }
 

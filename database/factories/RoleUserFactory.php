@@ -21,7 +21,7 @@ class RoleUserFactory extends Factory
         return [
             'iduser' => User::factory(),
             'idrole' => 5, // Default: Pemilik
-            'status' => 'aktif',
+            'status' => true,
         ];
     }
 

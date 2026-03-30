@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Dokter;
+use App\Models\Perawat;
 use App\Models\RoleUser;
 use App\Models\User;
 
@@ -32,7 +34,7 @@ trait WithRole
     }
 
     /**
-     * Create a user with Dokter role
+     * Create a user with Dokter role (juga membuat dokter record)
      */
     public static function dokter(): User
     {
@@ -42,11 +44,16 @@ trait WithRole
             ->dokter()
             ->create();
 
+        // Create dokter record
+        Dokter::factory()
+            ->forUser($user)
+            ->create();
+
         return $user->fresh();
     }
 
     /**
-     * Create a user with Perawat role
+     * Create a user with Perawat role (juga membuat perawat record)
      */
     public static function perawat(): User
     {
@@ -54,6 +61,11 @@ trait WithRole
         RoleUser::factory()
             ->forUser($user)
             ->perawat()
+            ->create();
+
+        // Create perawat record
+        Perawat::factory()
+            ->forUser($user)
             ->create();
 
         return $user->fresh();

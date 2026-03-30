@@ -25,6 +25,8 @@ class PetFactory extends Factory
             'jenis_kelamin' => fake()->randomElement(['J', 'B']),
             'idpemilik' => Pemilik::factory(),
             'idras_hewan' => RasHewan::factory(),
+            'deleted_at' => null,
+            'deleted_by' => null,
         ];
     }
 

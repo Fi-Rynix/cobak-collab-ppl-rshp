@@ -28,6 +28,8 @@ class KategoriKlinisFactory extends Factory
 
         return [
             'nama_kategori_klinis' => fake()->randomElement($kategoriKlinisList),
+            'deleted_at' => null,
+            'deleted_by' => null,
         ];
     }
 
