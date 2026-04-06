@@ -20,7 +20,7 @@ class TemuDokterFactory extends Factory
     {
         return [
             'no_urut' => fake()->unique()->numberBetween(1, 100),
-            'status' => fake()->randomElement(['menunggu', 'sedang_diperiksa', 'selesai']),
+            'status' => 'W',
             'idpet' => Pet::factory(),
             'idrole_user' => RoleUser::factory(),
         ];

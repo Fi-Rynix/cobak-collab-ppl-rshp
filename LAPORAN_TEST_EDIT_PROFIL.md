@@ -205,6 +205,13 @@ Data protection memastikan:
 
 ---
 
+## V. REKOMENDASI PERBAIKAN
+
+**Edit Profil - Authorization & Update Implementation**:
+Hasil pengujian menunjukkan bahwa fitur view profil berfungsi dengan baik (PASS) pada test TEPD-P01, namun fitur edit profil belum diimplementasikan sehingga menghasilkan RouteNotFoundException pada test TEPD-P02. Ketika fitur ini diimplementasi, harus mempertimbangkan beberapa aspek penting: (1) Controller harus melakukan authorization check menggunakan `auth()->id()` untuk memastikan dokter hanya dapat mengedit profil miliknya sendiri, bukan profil dokter lain; (2) Validation rule harus mencakup pengecekan format data seperti no_hp dan alamat agar sesuai dengan konstrain database; (3) Middleware 'IsDokter' harus dipastikan bekerja dengan baik dan mengembalikan HTTP 403 Forbidden jika ada role lain yang mencoba mengakses route edit profil, bukan 302 Redirect. Dengan implementasi yang tepat, setiap dokter akan hanya bisa mengakses dan memodifikasi data profil miliknya sendiri, memastikan integritas dan keamanan data profil di aplikasi.
+
+---
+
 ## V. CATATAN EKSEKUSI
 
 Cara Menjalankan Test:

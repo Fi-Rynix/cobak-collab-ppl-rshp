@@ -38,9 +38,7 @@ class EditProfilTest extends TestCase
         return $perawat;
     }
 
-    /**
-     * TEST 1: Dokter berhasil melihat profil miliknya
-     */
+    // Dokter berhasil melihat profil miliknya
     public function test_dokter_berhasil_melihat_profil_miliknya()
     {
         $dokter = $this->actAsDokter();
@@ -55,9 +53,8 @@ class EditProfilTest extends TestCase
         $this->assertEquals($dokter->iduser, auth()->id());
     }
 
-    /**
-     * TEST 2: Dokter berhasil mengedit profil miliknya
-     */
+
+    // Dokter berhasil mengedit profil miliknya
     public function test_dokter_berhasil_mengedit_profil_miliknya()
     {
         $dokter = $this->actAsDokter();
@@ -81,9 +78,7 @@ class EditProfilTest extends TestCase
         ]);
     }
 
-    /**
-     * TEST 3: Perawat gagal melihat profil dokter lain (403 Forbidden)
-     */
+    // Perawat gagal melihat profil dokter lain (403 Forbidden)
     public function test_perawat_gagal_melihat_profil_dokter_lain()
     {
         $dokter = WithRole::dokter();
@@ -94,9 +89,7 @@ class EditProfilTest extends TestCase
         $this->assertContains($response->status(), [302, 403, 404]);
     }
 
-    /**
-     * TEST 4: Dokter gagal melihat profil dokter lain
-     */
+    // Dokter gagal melihat profil dokter lain
     public function test_dokter_gagal_melihat_profil_dokter_lain()
     {
         $dokterLain = WithRole::dokter();
@@ -111,9 +104,7 @@ class EditProfilTest extends TestCase
         $this->assertNotEquals($dokterLain->iduser, auth()->id());
     }
 
-    /**
-     * TEST 5: Dokter gagal mengedit profil dokter lain
-     */
+    // Dokter gagal mengedit profil dokter lain
     public function test_dokter_gagal_mengedit_profil_dokter_lain()
     {
         $dokterLain = WithRole::dokter();
